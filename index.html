@@ -246,7 +246,25 @@
         .text-content::-webkit-scrollbar-thumb:hover {
             background: var(--accent-secondary);
         }
+
+        .artwork-section {
+        height: 100%;           /* ocupa toda la columna */
+        display: flex;
+        align-items: center;    /* centra vertical */
+        justify-content: center;
+        }
+
+        #div-sketch canvas {
+        max-width: 100%;        /* nunca se pasa del ancho de la columna */
+        max-height: 100%;       /* nunca se pasa del alto disponible */
+        height: auto !important;
+        width: auto !important;
+        object-fit: contain;    /* mantiene proporciones */
+        }
+
         
+
+
         /* Responsive */
         @media (max-width: 768px) {
             body {
