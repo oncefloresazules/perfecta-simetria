@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfecta simetría</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Variables del portfolio */
+        :root {
+            --primary-bg: #022741;
+            --secondary-bg: #0a1929;
+            --accent-color: #b14abf;
+            --accent-secondary: #41bf9a;
+            --accent-tertiary: #f2e63c;
+            --text-primary: #abb2bf;
+            --text-secondary: #8892a6;
+            --text-muted: #5c6370;
+            --border-color: #1e2a3a;
+            --font-mono: "JetBrains Mono", monospace;
+            --font-sans: "Inter", sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            height: 100vh;
+            overflow: hidden; /* Sin scroll de página */
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1 {
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: clamp(1.3rem, 3vw, 2rem);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .info {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+        }
+        
+        .info p {
+            margin: 3px 0;
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            font-weight: 500;
+        }
+        
+        .info strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Layout de dos columnas 50/50 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            flex: 1;
+            min-height: 0; /* Importante para el grid */
+        }
+        
+        .artwork-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #div-sketch {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            background: var(--secondary-bg);
+            box-shadow: 0 20px 40px rgba(0, 39, 65, 0.3);
+            margin-bottom: 15px;
+        }
+        
+        .instructions {
+            text-align: center;
+            font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+            color: var(--text-muted);
+            font-style: italic;
+            max-width: 350px;
+            font-family: var(--font-mono);
+            line-height: 1.4;
+        }
+        
+        /* Columna de texto */
+        .text-section {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .text-container {
+            background: rgba(10, 25, 41, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            min-height: 0;
+        }
+        
+        .text-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+            font-family: var(--font-sans);
+        }
+        
+        .text-content h3 {
+            color: var(--accent-secondary);
+            margin: 0 0 15px 0;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-family: var(--font-mono);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .text-content p {
+            margin-bottom: 14px;
+            font-weight: 400;
+            text-align: justify;
+        }
+        
+        .text-content p:first-of-type {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .text-content em {
+            color: var(--accent-tertiary);
+            font-style: italic;
+        }
+        
+        .text-content blockquote {
+            margin: 15px 0;
+            padding: 10px 15px;
+            border-left: 3px solid var(--accent-color);
+            background: rgba(177, 74, 191, 0.1);
+            font-style: italic;
+            color: var(--text-primary);
+        }
+        
+        /* Sección de bibliografía */
+        .bibliography {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .bibliography h4 {
+            color: var(--accent-secondary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .bibliography p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        /* Contenido expandido - inicialmente oculto */
+        .expanded-content {
+            display: none;
+        }
+        
+        .expanded-content.visible {
+            display: block;
+        }
+        
+        /* Botón expandir */
+        .expand-section {
+            margin-top: 15px;
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .expand-btn {
+            background: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+        
+        .expand-btn:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(177, 74, 191, 0.3);
+        }
+        
+        /* Scrollbar personalizada */
+        .text-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .text-content::-webkit-scrollbar-track {
+            background: var(--secondary-bg);
+            border-radius: 3px;
+        }
+        
+        .text-content::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .text-content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                overflow-y: auto; /* Permitir scroll en móvil */
+            }
+            
+            .container {
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .text-content {
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Perfecta simetría</h1>
+        <div class="info">
+            <p><strong>Florencia Pennella</strong> • 2024</p>
+            <p>Arte interactivo • p5.js</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- Columna izquierda: Obra -->
+            <div class="artwork-section">
+                <div id="div-sketch"></div>
+            </div>
+            
+            <!-- Columna derecha: Texto -->
+            <div class="text-section">
+                <div class="text-container">
+                    <div class="text-content" id="text-content">
+                        <p>“Perfecta simetría” sitúa al espectador en un movimiento sinuoso de diversos cuadrados superpuestos. La obra consta de una grilla de tres capas de cuadrados con diferentes características: La primera capa está conformada por cuadrados negros, la segunda por el borde blanco de cuadrados más pequeños, y la tercera por cuadrados negros con alfa de menor tamaño que el segundo nivel. El movimiento ondulado en forma de loop de las figuras y el juego con el fondo mediante los espacios generados entre ellas nos plantea una pregunta: ¿qué es el error?</p>
+                        
+                        
+                        <!-- Contenido expandido -->
+                        <div class="expanded-content" id="expanded-content">
+                            <h3>Desarrollo técnico, estético y conceptual</h3>
+                            
+                            <p>“Perfecta simetría” sitúa al espectador en un movimiento sinuoso de diversos cuadrados superpuestos. Un intento de ambigüedad puede transformar un patrón en algo sin límites. Surge una pregunta: ¿qué es el error? Una poeta argentina llamada Maia Tarcic escribe:</p>
+                            
+                            <blockquote>
+                               “Me gustan las cosas que parecen un error. <br>
+                               Los recuerdos son defectuosos, <br>
+                               fractales,<br>
+                               caprichosos.”<br>
+                            </blockquote>
+                            
+                            <p>José Luis Brea, en *Redefinición de las prácticas artísticas*, aproxima la creación artística a lo onírico de los sueños:</p>
+
+                            <blockquote>
+                               “Por más de una razón, deberíamos asemejar el trabajo del arte al del sueño: es una producción que induce formaciones de superficie que expresan, que traducen aproximadamente, un estado descompensado de energías. Lo esencial en ellas no es la forma o apariencia que adquieren en un instante dado, sino el campo de intensidades –o sea, el diferencial de potenciales– en el que se efectúan.”
+                            </blockquote>
+                            
+                            <p>Referido a esto, podemos deducir que el autor plantea que, tanto en el arte como en los sueños, entran en juego diversas tensiones que no se encuentran necesariamente fáciles de percibir. Sino que la forma posee capas más profundas, que solo conectando con ellas podremos descifrarlas o asimilarlas en un modo de sentir determinado.</p>
+                            
+                            <p>Una vez escuché que no podemos soñar imágenes que de alguna u otra forma no hayamos percibido con los ojos abiertos alguna vez. Es decir, que estén ligadas al recuerdo. Los sueños juegan al error, nos hablan desde el error, quizás mediante una persona que al avanzar la narrativa onírica deviene en otra, un lugar que se siente hogar pero no es casa, las cuerdas vocales que se apagan queriendo impulsar un grito, o la eterna caída sin fin que te devuelve despierto en la cama con una sensación de vacío o de algo que nunca llegó a su fin. Los sueños, dice José Luis Brea, no representan, y no representan porque son. El recuerdo los ayuda a ser, pero supongo que solo es la base para un sinfín de preguntas que surgen en el transcurso de unos pocos segundos:</p>
+
+                            <blockquote>
+                               “El trabajo del arte ya no más tiene que ver con la representación. ¿Alguien pensaría que el del sueño –ese que induce un «contenido aparente» en quien revive el «latente», o lo cuenta por la mañana– tiene que ver con la «representación»? ¿De qué? Negativo: el trabajo del sueño (...) es una melodía del deseo, nunca su pintura; es presencia, nunca re-presentación. Ese modo del trabajo que llamamos artístico debe a partir de ahora consagrarse a un producir similar –en la esfera del acontecimiento, de la presencia: nunca más en la de la representación.”
+                            </blockquote>
+
+                            <p>En este mundo que intenta ir hacia una utópica perfección, la irregularidad causada por un error puede descolocarnos. A veces tanto que nuestro mecanismo de defensa nos hace ignorarla. Recuerdo una fotografía en la vereda con mi grupo de amigxs; todxs salimos con los ojos iluminados a causa del flash. Hay quienes quisieron tomar una “mejor foto” (sí, entrecomillada); unos pocos vieron en ella la posibilidad de otra significación abriendo la puerta. Amigxs con ojos luminosos, como una suerte de amistad de otro mundo, de otro planeta.</p>
+
+                            <p>¿De dónde nace el error? ¿Por qué es tan sencillo identificarlo y, a veces, resulta tan complejo tenderle una mano, reinterpretarlo? ¿Es la incomodidad de advertir su presencia la que nos lleva a querer destruirlo o simplemente ignorarlo? 
+                            “Perfecta simetría” toma como referencia las obras de Vera Molnar denominadas *Hypertransformation* (1974) e *Interstices* (1986). La artista se desarrolla en el campo del computer art en donde se caracteriza por jugar con figuras, superponiéndolas, creando patrones y rompiéndolos con pequeñas irregularidades. La simetría está presente en ellas y el juego del error la pone en jaque. Sin embargo, es un concepto que puede hacerse presente en la mente del observador: ¿tiene que haber simetría para pensar en ella?</p>
+                            
+                            <div class="bibliography">
+                                <h4>Bibliografía</h4>
+                                <p>BREA, José Luis. (2002). <em>“Breve (y desordenado) antiglosario –o diccionario de tópicos- sobre el arte electrónico”</em> en La era postmedia. Acción comunicativa, prácticas (post)artísticas y dispositivos neomediales. Salamanca: CASA Editorial, pp. 4-8</p>
+                                <p>BREA, José Luis. (2008). <em>“Redefinición de las prácticas artísticas (s. 21)”</em> en El tercer umbral. Estatuto de las prácticas artísticas en la era del capitalismo cultural. Murcia: CENDEAC, pp. 106-113.</p>
+                                <p>TARCIC, Maia. (2021). <em>"Las cosas que parecen un error".</em> Ciudad Autónoma de Buenos Aires: Penguin Random House Grupo Editorial, pp. 47.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="expand-section">
+                        <button class="expand-btn" onclick="toggleExpand()" id="expand-btn">
+                            Expandir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.min.js"></script>
+    
+    <script>
+        // Toggle expand/contract
+        function toggleExpand() {
+            const expandedContent = document.getElementById('expanded-content');
+            const btn = document.getElementById('expand-btn');
+            
+            if (expandedContent.classList.contains('visible')) {
+                expandedContent.classList.remove('visible');
+                btn.textContent = 'Expandir';
+            } else {
+                expandedContent.classList.add('visible');
+                btn.textContent = 'Contraer';
+            }
+        }
+    </script>
+    
+    <script src="sketch.js"></script>
+</body>
+</html>
